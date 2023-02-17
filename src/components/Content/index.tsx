@@ -2,6 +2,8 @@ import { useState } from 'react';
 import useMediaQuery from '../../hooks/useMediaQuery';
 
 import Aside from '../Aside';
+import CardProduct from '../CardProduct';
+import CheckBoxContent from '../Checkbox';
 
 import {
   Container,
@@ -14,19 +16,14 @@ import {
 } from './styles';
 
 import settingIcon from '../../assets/images/settings.svg';
-import CardProduct from '../CardProduct';
-
-import { Category, Product } from '../../types';
-import CheckBoxContent from '../Checkbox';
-
 import searchNotFound from '../../assets/images/search-error.svg';
 
+import { Category, Product } from '../../types';
+
 export default function Content({
-  products,
-  categories,
   filteredProducts,
-  filteredOptions,
-  setFilteredOptions,
+  optionsFilter,
+  setOptionsFilter,
 }: ContentProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [asideIsOpen, setAsideIsOpen] = useState<boolean>(false);
@@ -36,10 +33,8 @@ export default function Content({
       {asideIsOpen && !isDesktop && (
         <Aside
           setIsOpen={setAsideIsOpen}
-          categories={categories}
-          filteredOptions={filteredOptions}
-          setFilteredOptions={setFilteredOptions}
-          products={products}
+          optionsFilter={optionsFilter}
+          setOptionsFilter={setOptionsFilter}
         />
       )}
 
@@ -71,19 +66,17 @@ export default function Content({
           <FilterContainer>
             <p>Filtros</p>
             <CheckBoxContent
-              products={products}
-              categories={categories}
-              setFilteredOptions={setFilteredOptions}
-              filteredOptions={filteredOptions}
+              optionsFilter={optionsFilter}
+              setOptionsFilter={setOptionsFilter}
             />
           </FilterContainer>
 
           <ContentContainer>
             <p>{filteredProducts.length} resultados</p>
-            {filteredProducts.length === 0 && filteredOptions.length === 0 ? (
+            {filteredProducts.length === 0 && optionsFilter.length === 0 ? (
               <SearchNotFoundContainer>
                 <img src={searchNotFound} alt="Search not found" />
-                <h2>Não encontramos nenhum produto com o nome</h2>
+                <h2>Não encontramos nenhum produto com este nome</h2>
               </SearchNotFoundContainer>
             ) : (
               <ContainerProducts>
@@ -105,9 +98,7 @@ export default function Content({
 }
 
 type ContentProps = {
-  products: Product[];
-  categories: Category[];
   filteredProducts: Product[];
-  filteredOptions: Category[];
-  setFilteredOptions: React.Dispatch<React.SetStateAction<Array<Category>>>;
+  optionsFilter: Category[];
+  setOptionsFilter: React.Dispatch<React.SetStateAction<Array<Category>>>;
 };
