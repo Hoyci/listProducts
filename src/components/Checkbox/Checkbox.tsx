@@ -7,14 +7,14 @@ export default function CheckBox({
   label,
   checked,
   optionQuantity,
-  setFilteredOptions,
+  setOptionsFilter,
 }: CheckBoxProps) {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const handleChangeCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const elementText = event.target.title;
     const elementCheck = event.target.checked;
     setIsChecked((prevState) => !prevState);
-    setFilteredOptions((prevState) =>
+    setOptionsFilter((prevState) =>
       prevState.map(({ name }) => name).includes(elementText)
         ? prevState.filter(({ name }) => name !== elementText)
         : [...prevState, { _id: id, name: elementText, checked: elementCheck }]
@@ -49,5 +49,5 @@ type CheckBoxProps = {
   label: string;
   checked?: boolean;
   optionQuantity: number;
-  setFilteredOptions: React.Dispatch<React.SetStateAction<Array<Category>>>;
+  setOptionsFilter: React.Dispatch<React.SetStateAction<Array<Category>>>;
 };

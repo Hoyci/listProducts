@@ -1,27 +1,25 @@
-import { Category, Product } from '../../types';
+import CategoriesSerivce from '../../service/CategoriesSerivce';
+import { Category } from '../../types';
 import CheckBox from './Checkbox';
 
 export default function CheckBoxContent({
-  products,
-  categories,
-  filteredOptions,
-  setFilteredOptions,
+  optionsFilter,
+  setOptionsFilter,
 }: CheckBoxContainerProps) {
   return (
     <main>
-      {categories.map((category) => (
+      {CategoriesSerivce.getCategories().map((category) => (
         <CheckBox
           key={category['_id']}
           id={category['_id']}
           label={category.name}
-          optionQuantity={
-            products.filter((item) => item.category.name === category.name)
-              .length
-          }
+          optionQuantity={CategoriesSerivce.countProductsByCategoryId(
+            category['_id']
+          )}
           checked={
-            filteredOptions.find((item) => item.name === category.name)?.checked
+            optionsFilter.find((item) => item.name === category.name)?.checked
           }
-          setFilteredOptions={setFilteredOptions}
+          setOptionsFilter={setOptionsFilter}
         />
       ))}
     </main>
@@ -29,8 +27,6 @@ export default function CheckBoxContent({
 }
 
 type CheckBoxContainerProps = {
-  products: Product[];
-  categories: Category[];
-  filteredOptions: Category[];
-  setFilteredOptions: React.Dispatch<React.SetStateAction<Array<Category>>>;
+  optionsFilter: Category[];
+  setOptionsFilter: React.Dispatch<React.SetStateAction<Array<Category>>>;
 };

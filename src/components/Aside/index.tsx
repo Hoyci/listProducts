@@ -10,17 +10,15 @@ import settingIcon from '../../assets/images/settings.svg';
 import closeIcon from '../../assets/images/close.svg';
 
 import CheckBoxContent from '../Checkbox';
-import { Category, Product } from '../../types';
+import { Category } from '../../types';
 
 export default function Aside({
-  products,
-  categories,
-  filteredOptions,
-  setFilteredOptions,
+  optionsFilter,
+  setOptionsFilter,
   setIsOpen,
 }: AsideProps) {
   const handleCloseAside = () => setIsOpen(false);
-  const handleClearOptions = () => setFilteredOptions([]);
+  const handleClearOptions = () => setOptionsFilter([]);
 
   return (
     <aside>
@@ -40,10 +38,8 @@ export default function Aside({
         </AsideHeader>
 
         <CheckBoxContent
-          products={products}
-          categories={categories}
-          setFilteredOptions={setFilteredOptions}
-          filteredOptions={filteredOptions}
+          optionsFilter={optionsFilter}
+          setOptionsFilter={setOptionsFilter}
         />
       </AsideContainer>
 
@@ -53,9 +49,7 @@ export default function Aside({
 }
 
 type AsideProps = {
-  filteredOptions: Category[];
-  categories: Category[];
-  products: Product[];
-  setFilteredOptions: React.Dispatch<React.SetStateAction<Array<Category>>>;
+  optionsFilter: Category[];
+  setOptionsFilter: React.Dispatch<React.SetStateAction<Array<Category>>>;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

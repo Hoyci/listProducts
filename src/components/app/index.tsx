@@ -8,33 +8,17 @@ import Header from '../Header';
 import Content from '../Content';
 import { AppContainer } from './styles';
 
-import { Category } from '../../types';
+import ProductsService from '../../service/ProductsService';
 
-import products from '../../database/productsCategory.json';
-import removeDuplicates from '../../utils/removeDuplicates';
+import { Category } from '../../types';
 
 export default function App() {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filteredOptions, setFilteredOptions] = useState<Array<Category>>([]);
+  const [optionsFilter, setOptionsFilter] = useState<Array<Category>>([]);
 
-  const categories = removeDuplicates(
-    products.data.nodes.map(({ category }) => category)
-  );
-
-  const filteredProducts = useMemo(
-    () =>
-      products.data.nodes.filter((product) => {
-        if (filteredOptions.length <= 0) {
-          return product.name.toLocaleLowerCase().includes(searchTerm);
-        }
-        return (
-          product.name.toLocaleLowerCase().includes(searchTerm) &&
-          filteredOptions
-            .map((item) => item.name)
-            .includes(product.category.name)
-        );
-      }),
-    [searchTerm, filteredOptions]
+  const productsFiltered = useMemo(
+    () => ProductsService.listProducts(searchTerm, optionsFilter),
+    [searchTerm, optionsFilter]
   );
 
   return (
@@ -44,11 +28,9 @@ export default function App() {
       <AppContainer>
         <Header setSearchTerm={setSearchTerm} />
         <Content
-          products={products.data.nodes}
-          categories={categories}
-          filteredProducts={filteredProducts}
-          filteredOptions={filteredOptions}
-          setFilteredOptions={setFilteredOptions}
+          filteredProducts={productsFiltered}
+          optionsFilter={optionsFilter}
+          setOptionsFilter={setOptionsFilter}
         />
       </AppContainer>
     </ThemeProvider>
